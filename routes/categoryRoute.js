@@ -26,7 +26,7 @@ module.exports = router;
 
 
 
-//http://localhost:5000/api/categories/createCategory
+// http://localhost:5000/api/categories/createCategory
 //http://localhost:5000/api/categories/updateCategory
 //http://localhost:5000/api/categories/deleteCategory
 //http://localhost:5000/api/categories/getAllCategory

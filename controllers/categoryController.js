@@ -1,21 +1,33 @@
 const Category = require('../models/Category');
 
 exports.createCategory = async (req, res) => {
+    console.log(req.body);
     try {
-        const { categoryName } = req.body;
-        const category = new Category({ categoryName, createdBy: req.user.id });
-        await category.save();
-        res.json(category);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server error');
+        const { name } = req.body;
+
+        // Check if the category already exists
+        const existingCategory = await Category.findOne({ name });
+        if (existingCategory) {
+            return res.status(400).json({ message: 'Category already exists' });
+        }
+
+       
+        const category = new Category({
+            name,
+            createdBy: req.user.id 
+        });
+
+        const savedCategory = await category.save();
+        res.status(201).send(savedCategory);
+    } catch (error) {
+        res.status(500).send({ message: 'Error creating category', error });
     }
 };
 
 exports.getCategories = async (req, res) => {
     try {
         const categories = await Category.find();
-        res.json(categories);
+        res.status(200).send({categories:categories});
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');

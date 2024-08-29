@@ -31,7 +31,7 @@ async function loginUser (req, res) {
         }
         const payload = { user: { id: user.id, role: user.role, name:user.name } };
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
-        console.log(token);
+        // console.log(token);
         res.status(202).send({ token:token, success:true });
     } catch (err) {
         res.status(500).send({ error: err.message });

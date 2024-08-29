@@ -1,9 +1,11 @@
 const Product = require('../models/Product');
 
+
 // Create a new product
 exports.createProduct = async (req, res) => {
     try {
         const { name, category, price, availability, quantity } = req.body;
+        const image = req.file ? req.file.filename : null; 
 
         // Check if the product already exists (optional)
         let product = await Product.findOne({ name });
@@ -14,6 +16,7 @@ exports.createProduct = async (req, res) => {
         // Create a new product instance
         product = new Product({
             name,
+            image,
             category,
             price,
             availability,
@@ -31,10 +34,22 @@ exports.createProduct = async (req, res) => {
 };
 
 // Get all products
-exports.getProducts = async (req, res) => {
+exports.getAllProducts = async (req, res) => {
     try {
-        const products = await Product.find().populate('category');
-        res.status(200).json(products);
+        const products = await Product.find();
+         // Modify each person object to include fullName, profileImage, and other necessary fields
+    const modifiedProducts = people.map(product => ({
+        id: product._id,
+        name:product.name,
+        productImage: product.image ? `http://localhost:5002/uploads/${product.image}` : null,
+        category:product.category,
+        price:product.price,
+        availability:product.available ? 'InStock' : 'OutOfStock',
+        quantity:product.quantity,
+      }));
+  
+      // Send the modified response
+      res.status(200).send(modifiedProducts);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');

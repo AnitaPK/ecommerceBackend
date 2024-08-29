@@ -1,21 +1,17 @@
 const express = require('express');
-const {
-    createProduct,
-    getProducts,
-    getProductById,
-    updateProduct,
-    deleteProduct,
-    getProductsByCategory
-} = require('../controllers/productController');
-const { protect, admin } = require('../middlewares/authorize');
+const productController = require('../controllers/productController');
+const authorize = require('../middlewares/authorize');
+const upload = require('../middlewares/multer');
+
+
 
 const router = express.Router();
 
 // Route to create a new product
-// router.post('/createProduct', protect, admin, createProduct);
+router.post('/createProduct', authorize.auth, authorize.admin, upload.single('image'),  productController.createProduct);
 
 // Route to get all products
-// router.get('/getAllProduct', getProducts);
+router.get('/getAllProduct',authorize.auth, productController.getAllProducts);
 
 // Route to get a product by ID
 // router.get('/:id', getProductById);
@@ -27,7 +23,7 @@ const router = express.Router();
 // router.delete('/deleteProduct/:id', protect, admin, deleteProduct);
 
 // Route to get products by category ID
-router.get('/getProductByCategoryName/:categoryId', getProductsByCategory);
+router.get('/getProductByCategoryName/:categoryId', productController.getProductsByCategory);
 
 module.exports = router;
 
