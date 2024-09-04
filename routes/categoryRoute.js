@@ -16,10 +16,10 @@ router.post('/createCategory', authorize.auth, authorize.admin, createCategory);
 router.get('/getAllCategory', authorize.auth, getCategories);
 
 // Route to update a category by ID
-// router.put('/updateCategory/:id', protect, admin, updateCategory);
+router.put('/updateCategory/:id', authorize.auth, authorize.admin, updateCategory);
 
 // Route to delete a category by ID
-// router.delete('/deleteCategory/:id', protect, admin, deleteCategory);
+router.delete('/deleteCategory/:id', authorize.auth, authorize.admin, deleteCategory);
 
 module.exports = router;
 

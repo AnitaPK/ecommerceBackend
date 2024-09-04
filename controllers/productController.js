@@ -1,4 +1,4 @@
-const Product = require('../models/Product');
+const Product = require('../models/product');
 
 
 // Create a new product
@@ -37,15 +37,15 @@ exports.createProduct = async (req, res) => {
 exports.getAllProducts = async (req, res) => {
     try {
         const products = await Product.find();
-         // Modify each person object to include fullName, profileImage, and other necessary fields
-    const modifiedProducts = people.map(product => ({
+         
+    const modifiedProducts = products.map(product => ({
         id: product._id,
         name:product.name,
         productImage: product.image ? `http://localhost:5002/uploads/${product.image}` : null,
         category:product.category,
         price:product.price,
-        availability:product.available ? 'InStock' : 'OutOfStock',
-        quantity:product.quantity,
+        // availability:product.available ? 'InStock' : 'OutOfStock',
+        // quantity:product.quantity,
       }));
   
       // Send the modified response
@@ -96,13 +96,14 @@ exports.updateProduct = async (req, res) => {
 
 // Delete a product
 exports.deleteProduct = async (req, res) => {
+    const { id } = req.params;
     try {
-        let product = await Product.findById(req.params.id);
+        let product = await Product.findById(id);
         if (!product) {
             return res.status(404).json({ msg: 'Product not found' });
         }
 
-        await product.remove();
+        await product.deleteOne({_id: id});
         res.status(200).json({ msg: 'Product removed' });
     } catch (err) {
         console.error(err.message);

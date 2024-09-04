@@ -26,7 +26,7 @@ exports.createCategory = async (req, res) => {
 
 exports.getCategories = async (req, res) => {
     try {
-        const categories = await Category.find();
+        const categories = await Category.find({},{name:1});
         res.status(200).send({categories:categories});
     } catch (err) {
         console.error(err.message);
@@ -38,13 +38,14 @@ exports.updateCategory = async (req, res) => {
     try {
         const { id } = req.params;
         const { categoryName } = req.body;
+        console.log(req.params, req.body);
         let category = await Category.findById(id);
         if (!category) {
             return res.status(404).json({ msg: 'Category not found' });
         }
-        category.categoryName = categoryName;
+        category.name = categoryName;
         category = await category.save();
-        res.json(category);
+        res.status(202).send(category);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
@@ -54,14 +55,18 @@ exports.updateCategory = async (req, res) => {
 exports.deleteCategory = async (req, res) => {
     try {
         const { id } = req.params;
-        let category = await Category.findById(id);
+        const category = await Category.findById(id);
+        
         if (!category) {
-            return res.status(404).json({ msg: 'Category not found' });
+            return res.status(404).send({ msg: 'Category not found' });
         }
-        await category.remove();
-        res.json({ msg: 'Category removed' });
+        
+        await Category.deleteOne({ _id: id });
+        res.status(200).send({ msg: 'Category removed' });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
     }
 };
+
+

@@ -17,10 +17,10 @@ router.get('/getAllProduct',authorize.auth, productController.getAllProducts);
 // router.get('/:id', getProductById);
 
 // Route to update a product by ID
-// router.put('/:id', protect, admin, updateProduct);
+router.put('updateProduct/:id', authorize.auth, authorize.admin, productController.updateProduct);
 
 // Route to delete a product by ID
-// router.delete('/deleteProduct/:id', protect, admin, deleteProduct);
+router.delete('/deleteProduct/:id', authorize.auth, authorize.admin, productController.deleteProduct);
 
 // Route to get products by category ID
 router.get('/getProductByCategoryName/:categoryId', productController.getProductsByCategory);
@@ -29,9 +29,9 @@ module.exports = router;
 
 
 //http://localhost:5000/api/products/createProduct
-//http://localhost:5000/api/products/updateProduct/:id
+//http://localhost:5000/api/products/updateProduct/${product._id}
 
-//http://localhost:5000/api/products/deleteProduct/:id
+//http://localhost:5000/api/products/deleteProduct/${product._id}
 
 //http://localhost:5000/api/products/getAllProduct
 
