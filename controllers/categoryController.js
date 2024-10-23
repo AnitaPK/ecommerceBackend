@@ -4,6 +4,7 @@ exports.createCategory = async (req, res) => {
     console.log(req.body);
     try {
         const { name } = req.body;
+        const image = req.file ? req.file.filename : null;
 
         // Check if the category already exists
         const existingCategory = await Category.findOne({ name });
@@ -14,6 +15,7 @@ exports.createCategory = async (req, res) => {
        
         const category = new Category({
             name,
+            image,
             createdBy: req.user.id 
         });
 
@@ -26,8 +28,13 @@ exports.createCategory = async (req, res) => {
 
 exports.getCategories = async (req, res) => {
     try {
-        const categories = await Category.find({},{name:1});
-        res.status(200).send({categories:categories});
+        const categories = await Category.find({},{name:1,image:1});
+        const modifiedCategories = categories.map(category => ({
+            _id : category._id,
+            name:category.name,
+            image:category.image ? `http://localhost:5000/uploads/${category.image}` :null,
+        }))
+        res.status(200).send({categories:modifiedCategories});
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');

@@ -11,19 +11,27 @@ const router = express.Router();
 router.post('/createProduct', authorize.auth, authorize.admin, upload.single('image'),  productController.createProduct);
 
 // Route to get all products
-router.get('/getAllProduct',authorize.auth, productController.getAllProducts);
+router.get('/getAllProduct', productController.getAllProducts);
+
+//Ropute to get count of products
+router.get('/getCountProducts', authorize.auth, productController.productCount)
+
+// Route to get products by category and brand
+router.get('/getProductByCategoryBrand', productController.getProductsByCategoryAndBrand);
 
 // Route to get a product by ID
-// router.get('/:id', getProductById);
+router.get('/:id', productController.getProductById);
 
 // Route to update a product by ID
-router.put('updateProduct/:id', authorize.auth, authorize.admin, productController.updateProduct);
+router.put('/updateProduct/:id', authorize.auth, authorize.admin, productController.updateProduct);
 
 // Route to delete a product by ID
 router.delete('/deleteProduct/:id', authorize.auth, authorize.admin, productController.deleteProduct);
 
 // Route to get products by category ID
 router.get('/getProductByCategoryName/:categoryId', productController.getProductsByCategory);
+
+
 
 module.exports = router;
 
